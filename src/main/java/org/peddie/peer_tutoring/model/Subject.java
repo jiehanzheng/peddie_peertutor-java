@@ -1,6 +1,29 @@
 package org.peddie.peer_tutoring.model;
 
 public enum Subject {
+	
+	ENGLISH,
+	HISTORY,
+	US_HISTORY,
+	US_GOVERNMENT,
+	EUROPEAN_HISTORY,
+	ART_HISTORY,
+	CHINESE,
+	FRENCH,
+	LATIN,
+	SPANISH,
+	MATHS,
+	STATS,
+	PRE_CALCULUS,
+	CALCULUS,
+	COMPSCI,
+	ECON,
+	CHEMISTRY,
+	BIOLOGY,
+	PSYCHOLOGY,
+	PHYSICS,
+	ENVIRONMENTAL;
+	
 
 	// TODO
 	

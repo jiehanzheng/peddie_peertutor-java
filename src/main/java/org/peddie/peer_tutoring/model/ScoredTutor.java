@@ -12,18 +12,26 @@ package org.peddie.peer_tutoring.model;
  * @author jiehan
  *
  */
-public class ScoredTutor {
+public class ScoredTutor implements Comparable<ScoredTutor> {
 
 	private Tutor tutor;
-	private double score;
+	private Double score;
 	
 	public ScoredTutor(Tutor tutor, double score) {
 		this.tutor = tutor;
 		this.score = score;
 	}
 	
-	public double getScore() {
+	public Double getScore() {
 		return score;
+	}
+	
+	public Tutor getTutor() {
+		return tutor;
+	}
+
+	public int compareTo(ScoredTutor o) {
+		return getScore().compareTo(o.getScore());
 	}
 	
 }

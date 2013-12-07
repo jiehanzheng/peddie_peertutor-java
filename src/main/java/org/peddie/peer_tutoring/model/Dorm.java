@@ -17,8 +17,8 @@ public enum Dorm {
 	MASTERS_NORTH  ("Masters North",  new LatLng(39, 116)),
 	MASTERS_SOUTH  ("Masters South",  new LatLng(39, 116)),
 	MASTERS_THREE  ("Masters Three",  new LatLng(39, 116)),
-	POTTER_NORTH   ("Potter North",   new LatLng(39, 116)),
-	POTTER_SOUTH   ("Potter South",   new LatLng(39, 116)),
+	POTTER_NORTH   ("Potter North",   new LatLng(40, 116)),
+	POTTER_SOUTH   ("Potter South",   new LatLng(40, 116)),
 	ROBERSON       ("Roberson",       new LatLng(39, 116)),
 	TRASK          ("Trask",          new LatLng(39, 116));
 	

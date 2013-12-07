@@ -7,13 +7,13 @@ import org.peddie.peer_tutoring.model.Tutor;
 
 public class Database {
 	
-	private static final String TUTORS_FILE = "tutors";
+	private static final String TUTORS_FILE = "tutors.json";
 	
 	private Path dataDirectory;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		
 	}
 	
 	public Database(Path dataDirectory) {

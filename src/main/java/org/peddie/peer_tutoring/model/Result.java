@@ -24,6 +24,10 @@ public class Result {
 	public void addTutor(ScoredTutor tutor) {
 		tutors.add(tutor);
 	}
+	
+	public void addTutors(List<ScoredTutor> tutors) {
+		tutors.addAll(tutors);
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
