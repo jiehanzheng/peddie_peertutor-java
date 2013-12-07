@@ -46,8 +46,8 @@ public class TutorMatcherTest {
 	 * Test if subject matches.
 	 * 
 	 * <p>
-	 * Given three tutors only one tutor who knows Chemistry, we should not get 
-	 * anyone else if a Chemistry tutor is requested.
+	 * Given a list of tutors in which only one tutor who knows Chemistry, we 
+	 * should not get anyone else if a Chemistry tutor is requested.
 	 * </p>
 	 */
 	@Test
@@ -72,7 +72,7 @@ public class TutorMatcherTest {
 	 * <p>
 	 * Given three tutors who all know the same subjects, a request from 
 	 * Potter North should receive a list of tutors with a Potter South tutor
-	 * on top of the list, since the two dorms are closest.
+	 * on top of the list, since the two dorms are the closest.
 	 * </p>
 	 */
 	@Test
