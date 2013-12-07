@@ -46,7 +46,7 @@ public class TutorMatcherTest {
 	 * Test if subject matches.
 	 * 
 	 * <p>
-	 * Given a list of tutors in which only one tutor who knows Chemistry, we 
+	 * Given a list of tutors in which only one tutor knows Chemistry, we 
 	 * should not get anyone else if a Chemistry tutor is requested.
 	 * </p>
 	 */
