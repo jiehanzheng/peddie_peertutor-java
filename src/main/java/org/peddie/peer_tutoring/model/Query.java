@@ -21,5 +21,13 @@ public class Query {
 	public String toString() {
 		return "Query(subject=" + subject + ", dorm=" + dorm + ")";
 	}
-	
+
+	public Subject getSubject() {
+		return subject;
+	}
+
+	public Dorm getDorm() {
+		return dorm;
+	}
+
 }
