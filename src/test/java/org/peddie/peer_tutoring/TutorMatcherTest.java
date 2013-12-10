@@ -60,6 +60,11 @@ public class TutorMatcherTest {
 		Query query = new Query(Subject.CHEMISTRY, Dorm.POTTER_SOUTH);
 		
 		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
+		List<ScoredTutor> returnedTutors = tutorMatcher.runQuery(query);
+		
+		if (returnedTutors.size() == 0)
+			fail("No tutors were returned.");
+		
 		for (ScoredTutor scoredTutor : tutorMatcher.runQuery(query)) {
 			if (!scoredTutor.getTutor().getSubjects().contains(Subject.CHEMISTRY))
 				fail("A tutor who doesn't know Chemistry is returned");
@@ -76,7 +81,7 @@ public class TutorMatcherTest {
 	 * </p>
 	 */
 	@Test
-	public final void testPhysicalProximityAwareness() {
+	public final void testPhysicalProximity() {
 		List<Tutor> tutors = new ArrayList<Tutor>();
 		tutors.add(new Tutor("Math guy", Dorm.CASPERSEN, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
 		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));

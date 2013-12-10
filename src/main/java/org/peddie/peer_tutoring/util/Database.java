@@ -21,8 +21,8 @@ public class Database {
 	}
 	
 	public List<Tutor> getTutors() {
-		// TODO
-		return null;
+		// TODO(adam)
+		throw new UnsupportedOperationException("Adam has not implemented this yet");
 	}
 
 }
