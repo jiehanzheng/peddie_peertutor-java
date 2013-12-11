@@ -1,16 +1,14 @@
 package org.peddie.peer_tutoring;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
-import org.peddie.peer_tutoring.TutorMatcher;
 import org.peddie.peer_tutoring.model.Dorm;
 import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.ScoredTutor;
@@ -30,7 +28,7 @@ public class TutorMatcherTest {
 	 */
 	@Test
 	public final void testStructure() {
-		List<Tutor> tutors = new ArrayList<Tutor>();
+		Set<Tutor> tutors = new HashSet<Tutor>();
 		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
 		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
 		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
@@ -52,7 +50,7 @@ public class TutorMatcherTest {
 	 */
 	@Test
 	public final void testSubject() {
-		List<Tutor> tutors = new ArrayList<Tutor>();
+		Set<Tutor> tutors = new HashSet<Tutor>();
 		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
 		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
 		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
@@ -82,7 +80,7 @@ public class TutorMatcherTest {
 	 */
 	@Test
 	public final void testPhysicalProximity() {
-		List<Tutor> tutors = new ArrayList<Tutor>();
+		Set<Tutor> tutors = new HashSet<Tutor>();
 		tutors.add(new Tutor("Math guy", Dorm.CASPERSEN, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
 		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
 		tutors.add(new Tutor("Chemistry guy", Dorm.MARIBOE, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
@@ -94,6 +92,7 @@ public class TutorMatcherTest {
 		Collections.sort(scoredTutors);
 		
 		assertEquals("First tutor's dorm should be Potter South", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("Second tutor should have a score lower than the first", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}
 
 }

@@ -2,18 +2,17 @@ package org.peddie.peer_tutoring;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.peddie.peer_tutoring.model.Query;
-import org.peddie.peer_tutoring.model.Result;
 import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Tutor;
-import org.peddie.peer_tutoring.util.Database;
 
 public class TutorMatcher {
 	
-	private final List<Tutor> tutors;
+	private final Set<Tutor> tutors;
 	
-	public TutorMatcher(List<Tutor> tutors) {
+	public TutorMatcher(Set<Tutor> tutors) {
 		this.tutors = tutors;
 	}
 
