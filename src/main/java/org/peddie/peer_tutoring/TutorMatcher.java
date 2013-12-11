@@ -11,7 +11,7 @@ import org.peddie.peer_tutoring.util.Database;
 
 public class TutorMatcher {
 	
-	private List<Tutor> tutors;
+	private final List<Tutor> tutors;
 	
 	public TutorMatcher(List<Tutor> tutors) {
 		this.tutors = tutors;

@@ -32,7 +32,7 @@ public enum Dorm {
 	}
 	
 	/**
-	 * Calculates the distance between this dorm and the other dorm.
+	 * Calculates the distance between this dorm and another dorm.
 	 * 
 	 * @param o another dorm to compare against
 	 * @return distance between the two given dorms in kilometers
