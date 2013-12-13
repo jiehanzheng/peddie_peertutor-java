@@ -80,6 +80,11 @@ public class PeerTutoringServer {
 		HttpServer server = HttpServer.create(addr, 0);
 
 		server.createContext("/api/query", new QueryHandler());
+		
+		// TODO(jiehan): implement the following
+//		server.createContext("/api/tutors", new TutorsListingHandler());
+//		server.createContext("/api/dorm", new DormsListingHandler());
+		
 		server.setExecutor(Executors.newCachedThreadPool());
 		server.start();
 
@@ -87,6 +92,7 @@ public class PeerTutoringServer {
 
 	}
 
+	
 	private static class QueryHandler implements HttpHandler {
 
 		Gson gson = new Gson();

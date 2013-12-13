@@ -36,20 +36,22 @@ public class TutorMatcher {
 	 * 
 	 * @param query the query to run
 	 * @return top five 
+	 * @author adam
 	 */
 	public List<ScoredTutor> runQuery(Query query) {
 		System.err.println("Working on query: " + query);
 
 		List<ScoredTutor> scoredTutors = new ArrayList<ScoredTutor>();
-		double score;
+
+
+		// XXX(adam,jiehan): this is dirty
 		double standardScore = Dorm.ROBERSON.distanceTo(Dorm.POTTER_NORTH);
 
 		// find out tutors whose subject match
 		for (Tutor tutor : tutors) {
 			if (tutor.getSubjects().contains(query.getSubject())) {
-				score = 100 - tutor.getDorm().distanceTo(query.getDorm())*100 / standardScore ;
-				System.out.println(score);
-				scoredTutors.add(new ScoredTutor(tutor, score)); //problem
+				double score = 100 - (tutor.getDorm().distanceTo(query.getDorm()) * 100) / standardScore;
+				scoredTutors.add(new ScoredTutor(tutor, score));
 			}
 		}
 

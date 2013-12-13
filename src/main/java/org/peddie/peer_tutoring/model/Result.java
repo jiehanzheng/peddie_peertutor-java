@@ -28,18 +28,18 @@ public class Result {
 	 * @param tutor
 	 */
 	public void addTutor(ScoredTutor tutor) {
-		tutors.add(tutor);
+		this.tutors.add(tutor);
 	}
 	
 	public void addTutors(List<ScoredTutor> tutors) {
-		tutors.addAll(tutors);
+		this.tutors.addAll(tutors);
 	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
 		for (ScoredTutor tutor : tutors) {
-			sb.append(tutor.toString() + " (" + tutor.getScore() + ")" + "\n");
+			sb.append(tutor.toString() + "\n");
 		}
 
 		return sb.toString();        
