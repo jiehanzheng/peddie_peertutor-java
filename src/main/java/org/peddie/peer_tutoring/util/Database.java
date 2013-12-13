@@ -22,6 +22,11 @@ public class Database {
 	
 	public List<Tutor> getTutors() {
 		// TODO(adam)
+		// java nio read directory (list files in a directory)
+		// read file to string
+		// deserialize using Gson (JSON format)
+		// return List<Tutor>
+		
 		throw new UnsupportedOperationException("Adam has not implemented this yet");
 	}
 

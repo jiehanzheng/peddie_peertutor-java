@@ -7,21 +7,20 @@ import com.javadocmd.simplelatlng.util.LengthUnit;
 public enum Dorm {
 	
 	// FIXME: fill in the real lat/lng
-	AUSTIN_COLGATE ("Austin-Colgate", new LatLng(39, 116)),
-	AVERY          ("Avery",          new LatLng(39, 116)),
-	CASPERSEN      ("Caspersen",      new LatLng(39, 116)),
-	COLEMAN        ("Coleman",        new LatLng(39, 116)),
-	KERR_NORTH     ("Kerr North",     new LatLng(39, 116)),
-	KERR_SOUTH     ("Kerr South",     new LatLng(39, 116)),
-	MARIBOE        ("Mariboe",        new LatLng(39, 116)),
-	MASTERS_NORTH  ("Masters North",  new LatLng(39, 116)),
-	MASTERS_SOUTH  ("Masters South",  new LatLng(39, 116)),
-	MASTERS_THREE  ("Masters Three",  new LatLng(39, 116)),
-	POTTER_NORTH   ("Potter North",   new LatLng(40, 116)),
-	POTTER_SOUTH   ("Potter South",   new LatLng(40, 116)),
-	ROBERSON       ("Roberson",       new LatLng(39, 116)),
-	TRASK          ("Trask",          new LatLng(39, 116));
-	
+	AUSTIN_COLGATE ("Austin-Colgate", new LatLng(40.264906, -74.524107)),
+	AVERY          ("Avery",          new LatLng(40.265440, -74.523863)),
+	CASPERSEN      ("Caspersen",      new LatLng(40.263403, -74.523788)),
+	COLEMAN        ("Coleman",        new LatLng(40.265313, -74.523136)),
+	KERR_NORTH     ("Kerr North",     new LatLng(40.266529, -74.523826)),
+	KERR_SOUTH     ("Kerr South",     new LatLng(40.266258, -74.523890)),
+	MARIBOE        ("Mariboe",        new LatLng(40.263514, -74.524435)),
+	MASTERS_NORTH  ("Masters North",  new LatLng(40.264656, -74.524185)),
+	MASTERS_SOUTH  ("Masters South",  new LatLng(40.264373, -74.524276)),
+	MASTERS_THREE  ("Masters Three",  new LatLng(40.264513, -74.524223)),
+	POTTER_NORTH   ("Potter North",   new LatLng(40.266985, -74.523783)),
+	POTTER_SOUTH   ("Potter South",   new LatLng(40.266813, -74.524276)),
+	ROBERSON       ("Roberson",       new LatLng(40.263053, -74.523536)),
+	TRASK          ("Trask",          new LatLng(40.265016, -74.523238));
 	
 	private final String name;
 	private final LatLng location;
@@ -37,6 +36,7 @@ public enum Dorm {
 	 * @param o another dorm to compare against
 	 * @return distance between the two given dorms in kilometers
 	 */
+	
 	public double distanceTo(Dorm o) {
 		return LatLngTool.distance(this.location, o.getLocation(), LengthUnit.KILOMETER);
 	}
@@ -47,6 +47,10 @@ public enum Dorm {
 	
 	public LatLng getLocation() {
 		return location;
+	}
+	
+	public static void main(String argsp[]) {
+		System.out.println(ROBERSON.distanceTo(POTTER_NORTH));
 	}
 	
 }

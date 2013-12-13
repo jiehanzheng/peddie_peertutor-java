@@ -34,4 +34,8 @@ public class Tutor {
 		return dorm;
 	}
 	
+	//added by adam
+	public String getName() {
+		return name;
+	}
 }

@@ -34,4 +34,8 @@ public class ScoredTutor implements Comparable<ScoredTutor> {
 		return getScore().compareTo(o.getScore());
 	}
 	
+	public String toString() {
+		return tutor.toString() + " (" + score + ")";
+	}
+	
 }

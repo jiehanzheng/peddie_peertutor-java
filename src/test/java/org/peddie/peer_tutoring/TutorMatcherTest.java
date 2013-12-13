@@ -90,6 +90,9 @@ public class TutorMatcherTest {
 		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
 		List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
 		Collections.sort(scoredTutors);
+		Collections.reverse(scoredTutors);
+		
+		System.err.println(scoredTutors);
 		
 		assertEquals("First tutor's dorm should be Potter South", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
 		assertTrue("Second tutor should have a score lower than the first", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
