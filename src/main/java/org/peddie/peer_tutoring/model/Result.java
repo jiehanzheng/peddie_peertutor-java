@@ -12,7 +12,13 @@ import java.util.List;
 public class Result {
 
 	private List<ScoredTutor> tutors = new ArrayList<ScoredTutor>();
-
+	
+	public Result() {}
+	
+	public Result(List<ScoredTutor> tutors) {
+		addTutors(tutors);
+	}
+	
 	/**
 	 * Adds tutor.
 	 * 
