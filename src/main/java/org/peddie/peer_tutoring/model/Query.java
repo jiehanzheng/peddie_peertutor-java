@@ -5,10 +5,11 @@ package org.peddie.peer_tutoring.model;
  * Container for a query from the interface.  This class includes information 
  * like the student's dorm, subject, and desired date.
  *
+ * @author jiehan
  */
 public class Query {
 
-	// TODO: implement duty nights
+	// TODO(jiehan): implement duty nights
 	
 	private Subject subject;
 	private Dorm dorm;
@@ -28,6 +29,10 @@ public class Query {
 
 	public Dorm getDorm() {
 		return dorm;
+	}
+	
+	public boolean isEmpty() {
+		return subject == null && dorm == null;
 	}
 
 }

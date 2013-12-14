@@ -5,8 +5,8 @@ package org.peddie.peer_tutoring.model;
  * like a score for a give tutor.
  * 
  * <p>
- * Score should be a number between 0 and 1 inclusive, indicating how well
- * a given tutor matches a given {@link Query}.
+ * Score should be greater than zero, and indicate how well a given tutor matches a given {@link Query}.
+ * 
  * </p>
  * 
  * @author jiehan

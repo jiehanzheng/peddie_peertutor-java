@@ -6,7 +6,6 @@ import com.javadocmd.simplelatlng.util.LengthUnit;
 
 public enum Dorm {
 	
-	// FIXME: fill in the real lat/lng
 	AUSTIN_COLGATE ("Austin-Colgate", new LatLng(40.264906, -74.524107)),
 	AVERY          ("Avery",          new LatLng(40.265440, -74.523863)),
 	CASPERSEN      ("Caspersen",      new LatLng(40.263403, -74.523788)),

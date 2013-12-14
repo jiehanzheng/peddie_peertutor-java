@@ -29,9 +29,9 @@ public class TutorMatcherTest {
 	@Test
 	public final void testStructure() {
 		Set<Tutor> tutors = new HashSet<Tutor>();
-		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
-		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
-		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
+		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
+		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
+		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
 		
 		Query query = new Query(Subject.CHINESE, Dorm.POTTER_SOUTH);
 		
@@ -51,9 +51,9 @@ public class TutorMatcherTest {
 	@Test
 	public final void testSubject() {
 		Set<Tutor> tutors = new HashSet<Tutor>();
-		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
-		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
-		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
+		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
+		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
+		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
 		
 		Query query = new Query(Subject.CHEMISTRY, Dorm.POTTER_SOUTH);
 		
@@ -81,9 +81,9 @@ public class TutorMatcherTest {
 	@Test
 	public final void testPhysicalProximity() {
 		Set<Tutor> tutors = new HashSet<Tutor>();
-		tutors.add(new Tutor("Math guy", Dorm.CASPERSEN, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
-		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
-		tutors.add(new Tutor("Chemistry guy", Dorm.MARIBOE, "", "", new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
+		tutors.add(new Tutor("Math guy", Dorm.CASPERSEN, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
+		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
+		tutors.add(new Tutor("Chemistry guy", Dorm.MARIBOE, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
 		
 		Query query = new Query(Subject.CHINESE, Dorm.POTTER_NORTH);
 		

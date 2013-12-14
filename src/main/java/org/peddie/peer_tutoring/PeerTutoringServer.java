@@ -1,21 +1,16 @@
 package org.peddie.peer_tutoring;
 
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -29,10 +24,18 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.peddie.peer_tutoring.model.Dorm;
 import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.Result;
+import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Subject;
 import org.peddie.peer_tutoring.model.Tutor;
 import org.peddie.peer_tutoring.util.CheatingDatabase;
 import org.peddie.peer_tutoring.util.Database;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
 public class PeerTutoringServer {
 
@@ -79,12 +82,11 @@ public class PeerTutoringServer {
 		}
 		HttpServer server = HttpServer.create(addr, 0);
 
-		server.createContext("/api/query", new QueryHandler());
-		
-		// TODO(jiehan): implement the following
-//		server.createContext("/api/tutors", new TutorsListingHandler());
-//		server.createContext("/api/dorm", new DormsListingHandler());
-		
+		server.createContext("/api/tutors", new QueryHandler());
+		server.createContext("/api/dorms", new DormsListingHandler());
+		server.createContext("/api/subjects", new SubjectsListingHandler());
+
+
 		server.setExecutor(Executors.newCachedThreadPool());
 		server.start();
 
@@ -92,38 +94,102 @@ public class PeerTutoringServer {
 
 	}
 
-	
-	private static class QueryHandler implements HttpHandler {
+
+	private static abstract class AbstractHttpHandler implements HttpHandler {
 
 		Gson gson = new Gson();
-		
+
 		@Override
 		public void handle(HttpExchange exchange) throws IOException {
 			List<NameValuePair> httpQuery = URLEncodedUtils.parse(exchange.getRequestURI(), "UTF-8");
-			System.err.println(httpQuery);
+			System.err.println(this.getClass().getName() + ": " + httpQuery);
 
 			Map<String, String> queryKeyToValue = new HashMap<String, String>();
 			for (NameValuePair pair : httpQuery) {
 				queryKeyToValue.put(pair.getName(), pair.getValue());
 			}
 
-			Query query;
 			try {
-				query = new Query(Subject.valueOf(queryKeyToValue.get("subject")),
-						Dorm.valueOf(queryKeyToValue.get("dorm")));
-				
-				Result result = new Result(tutorMatcher.runQuery(query));
-				System.err.println(result);
-				exchange.sendResponseHeaders(HttpStatus.SC_ACCEPTED, 0);
+				String result = processQuery(queryKeyToValue);
+				exchange.sendResponseHeaders(HttpStatus.SC_OK, 0);
 				OutputStream responseBody = exchange.getResponseBody();
-				responseBody.write(gson.toJson(result).getBytes());
-				
-			} catch (IllegalArgumentException e) {
+				responseBody.write(result.getBytes());
+			} catch (Exception e) {
 				e.printStackTrace();
 				exchange.sendResponseHeaders(HttpStatus.SC_NOT_ACCEPTABLE, -1);
 			}
-			
+
 			exchange.close();
+		}
+
+		protected abstract String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException;
+
+	}
+
+
+	private static class QueryHandler extends AbstractHttpHandler {
+
+		@Override
+		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
+			Subject subject = httpQuery.get("subject") != null ? Subject.valueOf(httpQuery.get("subject")) : null;
+			Dorm dorm = httpQuery.get("dorm") != null ? Dorm.valueOf(httpQuery.get("dorm")) : null;
+			
+			Query query = new Query(subject, dorm);
+
+			List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
+			Collections.sort(scoredTutors);
+			Collections.reverse(scoredTutors);
+			
+			Result result = new Result(scoredTutors);
+			return gson.toJson(result);
+		}
+
+	}
+
+
+	private static class DormsListingHandler extends AbstractHttpHandler {
+
+		@Override
+		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
+			JsonArray dormsJsonArray = new JsonArray();
+			for (Dorm dorm : Dorm.values()) {
+				JsonObject dormJsonObject = new JsonObject();
+				dormJsonObject.addProperty("name", dorm.getName());
+				dormJsonObject.addProperty("lat", dorm.getLocation().getLatitude());
+				dormJsonObject.addProperty("lng", dorm.getLocation().getLongitude());
+
+				JsonObject namedDormJsonObject = new JsonObject();
+				namedDormJsonObject.add(dorm.name(), dormJsonObject);
+				dormsJsonArray.add(namedDormJsonObject);
+			}
+
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.add("dorms", dormsJsonArray);
+
+			return jsonObject.toString();
+		}
+
+	}
+
+
+	private static class SubjectsListingHandler extends AbstractHttpHandler {
+
+		@Override
+		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
+			JsonArray dormsJsonArray = new JsonArray();
+			for (Subject subject : Subject.values()) {
+				JsonObject dormJsonObject = new JsonObject();
+				dormJsonObject.addProperty("name", subject.getName());
+
+				JsonObject namedSubjectJsonObject = new JsonObject();
+				namedSubjectJsonObject.add(subject.name(), dormJsonObject);
+				dormsJsonArray.add(namedSubjectJsonObject);
+			}
+
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.add("subjects", dormsJsonArray);
+
+			return jsonObject.toString();
 		}
 
 	}

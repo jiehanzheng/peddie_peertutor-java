@@ -39,15 +39,22 @@ public class TutorMatcher {
 	 * @author adam
 	 */
 	public List<ScoredTutor> runQuery(Query query) {
-		System.err.println("Working on query: " + query);
-
 		List<ScoredTutor> scoredTutors = new ArrayList<ScoredTutor>();
+		
+		if (query.isEmpty()) {
+			for (Tutor tutor : tutors) {
+				scoredTutors.add(new ScoredTutor(tutor, 0));
+			}
+			
+			return scoredTutors;
+		}
 
-
-		// XXX(adam,jiehan): this is dirty
+		// XXX(adam): this is dirty
+		// try to change the scoring formula so that you don't need max dist
 		double standardScore = Dorm.ROBERSON.distanceTo(Dorm.POTTER_NORTH);
 
-		// find out tutors whose subject match
+		// find out tutors whose subject match first
+		// TODO(jiehan): implement duty nights
 		for (Tutor tutor : tutors) {
 			if (tutor.getSubjects().contains(query.getSubject())) {
 				double score = 100 - (tutor.getDorm().distanceTo(query.getDorm()) * 100) / standardScore;

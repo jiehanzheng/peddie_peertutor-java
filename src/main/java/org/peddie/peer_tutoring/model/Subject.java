@@ -2,29 +2,33 @@ package org.peddie.peer_tutoring.model;
 
 public enum Subject {
 	
-	ENGLISH,
-	HISTORY,
-	US_HISTORY,
-	US_GOVERNMENT,
-	EUROPEAN_HISTORY,
-	ART_HISTORY,
-	CHINESE,
-	FRENCH,
-	LATIN,
-	SPANISH,
-	MATHS,
-	STATS,
-	PRE_CALCULUS,
-	CALCULUS,
-	COMPSCI,
-	ECON,
-	CHEMISTRY,
-	BIOLOGY,
-	PSYCHOLOGY,
-	PHYSICS,
-	ENVIRONMENTAL;
-	
+	CHEMISTRY        ("Chemistry"),
+	MATHS            ("Maths (Alg/Geo)"),
+	STATS            ("Statistics"),
+	PRE_CALCULUS     ("Pre-Calculus"),
+	CALCULUS         ("Calculus"),
+	COMPSCI          ("Computer Science"),
+	HISTORY          ("History"),
+	CHINESE          ("Chinese"),
+	FRENCH           ("French"),
+	LATIN            ("Latin"),
+	SPANISH          ("Spanish"),
+	ECON             ("Economics"),
+	BIOLOGY          ("Biology"),
+	PSYCHOLOGY       ("Psychology"),
+	PHYSICS          ("Physics"),
+	ENVIRONMENTAL    ("Environmental Science"),
+	ENGLISH          ("English");
 
-	// TODO
+	
+	private String name;
+	
+	Subject(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
 	
 }
