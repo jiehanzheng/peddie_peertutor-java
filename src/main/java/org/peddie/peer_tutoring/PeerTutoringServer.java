@@ -33,6 +33,7 @@ import org.peddie.peer_tutoring.util.Database;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -86,7 +87,6 @@ public class PeerTutoringServer {
 		server.createContext("/api/dorms", new DormsListingHandler());
 		server.createContext("/api/subjects", new SubjectsListingHandler());
 
-
 		server.setExecutor(Executors.newCachedThreadPool());
 		server.start();
 
@@ -111,6 +111,8 @@ public class PeerTutoringServer {
 
 			try {
 				String result = processQuery(queryKeyToValue);
+				Headers responseHeaders = exchange.getResponseHeaders();
+				responseHeaders.add("Access-Control-Allow-Origin", "*");
 				exchange.sendResponseHeaders(HttpStatus.SC_OK, 0);
 				OutputStream responseBody = exchange.getResponseBody();
 				responseBody.write(result.getBytes());
