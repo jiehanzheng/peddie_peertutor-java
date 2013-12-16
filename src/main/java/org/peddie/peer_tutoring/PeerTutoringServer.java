@@ -52,7 +52,7 @@ public class PeerTutoringServer {
 		// parse cmdline options
 		ArgumentParser parser = ArgumentParsers.newArgumentParser("PeerTutoringServer")
 				.defaultHelp(true)
-				.description("A backend TCP socket server for the Peddie peer tutoring website.");
+				.description("A backend HTTP server for the Peddie peer tutoring website.");
 
 		parser.addArgument("dbpath").help("directory for datafiles");
 		parser.addArgument("-p", "--port").help("TCP port to bind to").setDefault(12130);
