@@ -4,6 +4,10 @@ import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
 
+/**
+ * @author jiehan
+ *
+ */
 public enum Dorm {
 	
 	AUSTIN_COLGATE ("Austin-Colgate", new LatLng(40.264906, -74.524107)),
@@ -46,10 +50,6 @@ public enum Dorm {
 	
 	public LatLng getLocation() {
 		return location;
-	}
-	
-	public static void main(String argsp[]) {
-		System.out.println(ROBERSON.distanceTo(POTTER_NORTH));
 	}
 	
 }

@@ -8,94 +8,186 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.peddie.peer_tutoring.model.Dorm;
+import org.peddie.peer_tutoring.model.DutyDay;
 import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Subject;
 import org.peddie.peer_tutoring.model.Tutor;
+import org.peddie.peer_tutoring.util.CheatingDatabase;
+import org.peddie.peer_tutoring.util.Database;
 
+/**
+ * @author jiehan
+ *
+ */
 public class TutorMatcherTest {
 
-	/**
-	 * Test result structure.
-	 * 
-	 * <p>
-	 * Given three tutors who all know Chinese and live in Potter South, if we 
-	 * ask for tutors in Potter South who know Chinese, we should get exactly 
-	 * three tutors in the result list.
-	 * </p>
-	 */
-	@Test
-	public final void testStructure() {
-		Set<Tutor> tutors = new HashSet<Tutor>();
-		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
-		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
-		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
-		
-		Query query = new Query(Subject.CHINESE, Dorm.POTTER_SOUTH);
-		
-		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
-		if (tutorMatcher.runQuery(query).size() != 3)
-			fail("Number of tutors returned is incorrect");
+	private static Set<Tutor> tutors = new HashSet<Tutor>();
+
+	@BeforeClass
+	public final static void setUpTutors() {
+		Database database = new CheatingDatabase();
+		tutors = database.getTutors();
 	}
-	
+
 	/**
-	 * Test if subject matches.
+	 * Tests result structure.
 	 * 
 	 * <p>
-	 * Given a list of tutors in which only one tutor knows Chemistry, we 
-	 * should not get anyone else if a Chemistry tutor is requested.
+	 * If an empty query was given, the entire list of tutors should be 
+	 * returned.
 	 * </p>
 	 */
 	@Test
-	public final void testSubject() {
-		Set<Tutor> tutors = new HashSet<Tutor>();
-		tutors.add(new Tutor("Math guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.MATHS))));
-		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.COMPSCI, Subject.CHINESE))));
-		tutors.add(new Tutor("Chemistry guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
-		
-		Query query = new Query(Subject.CHEMISTRY, Dorm.POTTER_SOUTH);
-		
+	public final void testEmptyQuery() {
+		Query query = new Query(null, null, null);
+
 		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
-		List<ScoredTutor> returnedTutors = tutorMatcher.runQuery(query);
-		
-		if (returnedTutors.size() == 0)
-			fail("No tutors were returned.");
-		
-		for (ScoredTutor scoredTutor : tutorMatcher.runQuery(query)) {
-			if (!scoredTutor.getTutor().getSubjects().contains(Subject.CHEMISTRY))
-				fail("A tutor who doesn't know Chemistry is returned");
+		assertEquals("Number of tutors returned is incorrect.", tutorMatcher.runQuery(query).size(), tutors.size());
+	}
+
+	/**
+	 * Tests if subject matches.
+	 * 
+	 * <p>
+	 * Sees if there are any extraneous output if we ask for only Chemistry 
+	 * tutors.
+	 * </p>
+	 */
+	@Test
+	public final void testOnlySubject() {
+		Query query = new Query(Subject.CHEMISTRY, null, null);
+
+		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
+		List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
+
+		// # expected tutor = # on duty on Monday
+		int numberOfExpectedTutors = 0;
+		for (Tutor tutor : tutors) {
+			if (tutor.getSubjects().contains(Subject.CHEMISTRY))
+				numberOfExpectedTutors++;
+		}
+
+		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors, scoredTutors.size());
+
+		for (ScoredTutor scoredTutor : scoredTutors) {
+			assertTrue("A tutor who doesn't know Chemistry was returned.", scoredTutor.getTutor().getSubjects().contains(Subject.CHEMISTRY));
 		}
 	}
-	
+
 	/**
-	 * Test if the algorithm takes into consideration of physical proximity.
+	 * Tests if the algorithm handles sorting by dorm if subject and duty day
+	 * are null.
 	 * 
 	 * <p>
-	 * Given three tutors who all know the same subjects, a request from 
-	 * Potter North should receive a list of tutors with a Potter South tutor
-	 * on top of the list, since the two dorms are the closest.
+	 * In this case your method should return all the tutors, regardless of 
+	 * their dorms or duty nights, and compute score based on distance.
 	 * </p>
 	 */
 	@Test
-	public final void testPhysicalProximity() {
-		Set<Tutor> tutors = new HashSet<Tutor>();
-		tutors.add(new Tutor("Math guy", Dorm.CASPERSEN, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
-		tutors.add(new Tutor("CompSci guy", Dorm.POTTER_SOUTH, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
-		tutors.add(new Tutor("Chemistry guy", Dorm.MARIBOE, null, null, new HashSet<Subject>(Arrays.asList(Subject.CHINESE))));
-		
-		Query query = new Query(Subject.CHINESE, Dorm.POTTER_NORTH);
-		
+	public final void testOnlyDorm() {
+		Query query = new Query(null, Dorm.POTTER_NORTH, null);
+
 		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
 		List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
 		Collections.sort(scoredTutors);
 		Collections.reverse(scoredTutors);
-		
-		System.err.println(scoredTutors);
-		
-		assertEquals("First tutor's dorm should be Potter South", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
-		assertTrue("Second tutor should have a score lower than the first", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
+
+		assertEquals("Method should not remove any tutors.", scoredTutors.size(), tutors.size());
+		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
+	}
+
+	/**
+	 * Tests if the algorithm handles duty nights correctly.
+	 * 
+	 * <p>
+	 * Duty nights must match exactly.
+	 * </p>
+	 */
+	@Test
+	public final void testOnlyDutyDay() {
+		Query query = new Query(null, null, DutyDay.MONDAY);
+
+		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
+		List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
+
+		// # expected tutor = # on duty on Monday
+		int numberOfExpectedTutors = 0;
+		for (Tutor tutor : tutors) {
+			if (tutor.getDutyDays().contains(DutyDay.MONDAY))
+				numberOfExpectedTutors++;
+		}
+
+		for (ScoredTutor scoredTutor : scoredTutors) {
+			assertTrue("A tutor who is not on duty on Monday was returned.", scoredTutor.getTutor().getDutyDays().contains(DutyDay.MONDAY));
+		}
+
+		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors, scoredTutors.size());
+	}
+
+	/**
+	 * Tests if the algorithm takes into consideration of subject and physical 
+	 * proximity.
+	 * 
+	 */
+	@Test
+	public final void testSubjectAndDorm() {
+		Query query = new Query(Subject.CHINESE, Dorm.POTTER_NORTH, null);
+
+		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
+		List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
+		Collections.sort(scoredTutors);
+		Collections.reverse(scoredTutors);
+
+		// # expected tutor = # know chinese
+		int numberOfExpectedTutors = 0;
+		for (Tutor tutor : tutors) {
+			if (tutor.getSubjects().contains(Subject.CHINESE))
+				numberOfExpectedTutors++;
+		}
+
+		for (ScoredTutor scoredTutor : scoredTutors) {
+			if (!scoredTutor.getTutor().getSubjects().contains(Subject.CHINESE))
+				fail("A tutor who does not know Chinese was returned.");
+		}
+
+		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors, scoredTutors.size());
+		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
+	}
+
+	/**
+	 * Tests subject, dorm and duty night.
+	 * 
+	 */
+	@Test
+	public final void testSubjectAndDormAndDutyNight() {
+		Query query = new Query(Subject.CHINESE, Dorm.POTTER_NORTH, DutyDay.MONDAY);
+
+		TutorMatcher tutorMatcher = new TutorMatcher(tutors);
+		List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
+		Collections.sort(scoredTutors);
+		Collections.reverse(scoredTutors);
+
+		// # expected tutor = # know chinese && on duty on monday
+		int numberOfExpectedTutors = 0;
+		for (Tutor tutor : tutors) {
+			if (tutor.getSubjects().contains(Subject.CHINESE) && tutor.getDutyDays().contains(DutyDay.MONDAY))
+				numberOfExpectedTutors++;
+		}
+
+		for (ScoredTutor scoredTutor : scoredTutors) {
+			assertTrue("A tutor who does not know Chinese was returned.", scoredTutor.getTutor().getSubjects().contains(Subject.CHINESE));
+			assertTrue("A tutor who is not on duty on Monday was returned.", scoredTutor.getTutor().getDutyDays().contains(DutyDay.MONDAY));
+		}
+
+		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors == scoredTutors.size());
+		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}
 
 }

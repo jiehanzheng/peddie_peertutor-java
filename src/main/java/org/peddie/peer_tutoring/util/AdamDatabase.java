@@ -6,6 +6,10 @@ import java.util.Set;
 
 import org.peddie.peer_tutoring.model.Tutor;
 
+/**
+ * @author adam
+ *
+ */
 public class AdamDatabase {
 	
 	private static final String TUTORS_FOLDER = "tutors";

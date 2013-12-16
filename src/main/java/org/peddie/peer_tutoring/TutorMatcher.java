@@ -10,6 +10,10 @@ import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Tutor;
 
+/**
+ * @author adam
+ *
+ */
 public class TutorMatcher {
 
 	private final Set<Tutor> tutors;
@@ -36,7 +40,6 @@ public class TutorMatcher {
 	 * 
 	 * @param query the query to run
 	 * @return top five 
-	 * @author adam
 	 */
 	public List<ScoredTutor> runQuery(Query query) {
 		List<ScoredTutor> scoredTutors = new ArrayList<ScoredTutor>();
@@ -49,12 +52,16 @@ public class TutorMatcher {
 			return scoredTutors;
 		}
 
-		// XXX(adam): this is dirty
+		// TODO(adam): also filter tutors by DutyDay's
+		
+		// FIXME(adam): deal with nulls in Query's fields
+		// see basecamp: https://basecamp.com/2290910/projects/4508942-peer-tutoring/todos/75085591-make-tutormatcher
+		
+		// FIXME(adam): this is dirty
 		// try to change the scoring formula so that you don't need max dist
 		double standardScore = Dorm.ROBERSON.distanceTo(Dorm.POTTER_NORTH);
 
 		// find out tutors whose subject match first
-		// TODO(jiehan): implement duty nights
 		for (Tutor tutor : tutors) {
 			if (tutor.getSubjects().contains(query.getSubject())) {
 				double score = 100 - (tutor.getDorm().distanceTo(query.getDorm()) * 100) / standardScore;

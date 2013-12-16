@@ -9,18 +9,19 @@ package org.peddie.peer_tutoring.model;
  */
 public class Query {
 
-	// TODO(jiehan): implement duty nights
-	
 	private Subject subject;
 	private Dorm dorm;
+	private DutyDay dutyDay;
 
-	public Query(Subject subject, Dorm dorm) {
+	public Query(Subject subject, Dorm dorm, DutyDay dutyDay) {
 		this.subject = subject;
 		this.dorm = dorm;
+		this.dutyDay = dutyDay;
 	}
 
 	public String toString() {
-		return "Query(subject=" + subject + ", dorm=" + dorm + ")";
+		return "Query(subject=" + subject + ", dorm=" + dorm 
+				+ ", dutyDay=" + dutyDay + ")";
 	}
 
 	public Subject getSubject() {
@@ -30,9 +31,13 @@ public class Query {
 	public Dorm getDorm() {
 		return dorm;
 	}
-	
+
+	public DutyDay getDutyDay() {
+		return dutyDay;
+	}
+
 	public boolean isEmpty() {
-		return subject == null && dorm == null;
+		return subject == null && dorm == null && dutyDay == null;
 	}
 
 }

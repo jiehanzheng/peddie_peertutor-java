@@ -1,5 +1,9 @@
 package org.peddie.peer_tutoring.model;
 
+/**
+ * @author jiehan
+ *
+ */
 public enum Subject {
 	
 	CHEMISTRY        ("Chemistry"),

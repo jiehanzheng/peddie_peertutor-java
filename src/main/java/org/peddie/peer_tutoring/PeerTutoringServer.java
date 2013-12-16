@@ -22,6 +22,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.peddie.peer_tutoring.model.Dorm;
+import org.peddie.peer_tutoring.model.DutyDay;
 import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.Result;
 import org.peddie.peer_tutoring.model.ScoredTutor;
@@ -38,6 +39,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+/**
+ * @author jiehan
+ *
+ */
 public class PeerTutoringServer {
 
 	private static Database database;
@@ -135,8 +140,9 @@ public class PeerTutoringServer {
 		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
 			Subject subject = httpQuery.get("subject") != null ? Subject.valueOf(httpQuery.get("subject")) : null;
 			Dorm dorm = httpQuery.get("dorm") != null ? Dorm.valueOf(httpQuery.get("dorm")) : null;
+			DutyDay dutyDay = httpQuery.get("duty_day") != null ? DutyDay.valueOf(httpQuery.get("duty_day")) : null;
 			
-			Query query = new Query(subject, dorm);
+			Query query = new Query(subject, dorm, dutyDay);
 
 			List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
 			Collections.sort(scoredTutors);
