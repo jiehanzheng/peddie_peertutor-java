@@ -39,7 +39,6 @@ public enum Dorm {
 	 * @param o another dorm to compare against
 	 * @return distance between the two given dorms in kilometers
 	 */
-	
 	public double distanceTo(Dorm o) {
 		return LatLngTool.distance(this.location, o.getLocation(), LengthUnit.KILOMETER);
 	}

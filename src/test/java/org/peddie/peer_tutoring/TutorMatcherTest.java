@@ -31,6 +31,7 @@ public class TutorMatcherTest {
 	public final static void setUpTutors() {
 		Database database = new CheatingDatabase();
 		tutors = database.getTutors();
+		System.err.println(tutors);
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class TutorMatcherTest {
 		Collections.sort(scoredTutors);
 		Collections.reverse(scoredTutors);
 
-		assertEquals("Method should not remove any tutors.", scoredTutors.size(), tutors.size());
+		assertEquals("Method should not remove any tutors.", tutors.size(), scoredTutors.size());
 		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
 		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}
@@ -185,7 +186,7 @@ public class TutorMatcherTest {
 			assertTrue("A tutor who is not on duty on Monday was returned.", scoredTutor.getTutor().getDutyDays().contains(DutyDay.MONDAY));
 		}
 
-		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors == scoredTutors.size());
+		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors, scoredTutors.size());
 		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
 		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}

@@ -24,12 +24,11 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.peddie.peer_tutoring.model.Dorm;
 import org.peddie.peer_tutoring.model.DutyDay;
 import org.peddie.peer_tutoring.model.Query;
-import org.peddie.peer_tutoring.model.Result;
 import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Subject;
 import org.peddie.peer_tutoring.model.Tutor;
-import org.peddie.peer_tutoring.util.CheatingDatabase;
 import org.peddie.peer_tutoring.util.Database;
+import org.peddie.peer_tutoring.util.PlainOldJavaClassDatabase;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -70,7 +69,7 @@ public class PeerTutoringServer {
 			throw new IllegalArgumentException("dbpath " + databasePath + " don't exist.");
 
 		// read database
-		database = new CheatingDatabase();
+		database = new PlainOldJavaClassDatabase();
 
 		// read tutors from database
 		Set<Tutor> tutors = database.getTutors();
@@ -91,12 +90,12 @@ public class PeerTutoringServer {
 		server.createContext("/api/tutors", new QueryHandler());
 		server.createContext("/api/dorms", new DormsListingHandler());
 		server.createContext("/api/subjects", new SubjectsListingHandler());
+		server.createContext("/api/duty_days", new DutyDaysListingHandler());
 
 		server.setExecutor(Executors.newCachedThreadPool());
 		server.start();
 
 		System.err.println("HTTP server listening on " + port + ".");
-
 	}
 
 
@@ -113,20 +112,31 @@ public class PeerTutoringServer {
 			for (NameValuePair pair : httpQuery) {
 				queryKeyToValue.put(pair.getName(), pair.getValue());
 			}
-
+			
+			JsonObject defaultResultObject = new JsonObject();
+			defaultResultObject.addProperty("error", "Unknown error.");
+			
+			String result = defaultResultObject.toString();
+			int rCode = HttpStatus.SC_NOT_ACCEPTABLE;
+			long responseLength = 0;
 			try {
-				String result = processQuery(queryKeyToValue);
-				Headers responseHeaders = exchange.getResponseHeaders();
-				responseHeaders.add("Access-Control-Allow-Origin", "*");
-				exchange.sendResponseHeaders(HttpStatus.SC_OK, 0);
-				OutputStream responseBody = exchange.getResponseBody();
-				responseBody.write(result.getBytes());
+				result = processQuery(queryKeyToValue);
+				rCode = HttpStatus.SC_OK;
+				responseLength = 0;
 			} catch (Exception e) {
 				e.printStackTrace();
-				exchange.sendResponseHeaders(HttpStatus.SC_NOT_ACCEPTABLE, -1);
+				JsonObject errorResultObject = new JsonObject();
+				errorResultObject.addProperty("error", e.getLocalizedMessage());
+				result = errorResultObject.toString();
+			} finally {
+				Headers responseHeaders = exchange.getResponseHeaders();
+				responseHeaders.add("Access-Control-Allow-Origin", "*");
+				responseHeaders.add("Content-Type", "application/json");
+				exchange.sendResponseHeaders(rCode, responseLength);
+				OutputStream responseBody = exchange.getResponseBody();
+				responseBody.write(result.getBytes());
+				exchange.close();
 			}
-
-			exchange.close();
 		}
 
 		protected abstract String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException;
@@ -138,18 +148,18 @@ public class PeerTutoringServer {
 
 		@Override
 		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
-			Subject subject = httpQuery.get("subject") != null ? Subject.valueOf(httpQuery.get("subject")) : null;
-			Dorm dorm = httpQuery.get("dorm") != null ? Dorm.valueOf(httpQuery.get("dorm")) : null;
-			DutyDay dutyDay = httpQuery.get("duty_day") != null ? DutyDay.valueOf(httpQuery.get("duty_day")) : null;
+			Subject subject = (httpQuery.get("subject") == null || httpQuery.get("subject").equals("null")) ? null : Subject.valueOf(httpQuery.get("subject"));
+			Dorm dorm = (httpQuery.get("dorm") == null || httpQuery.get("dorm").equals("null")) ? null : Dorm.valueOf(httpQuery.get("dorm"));
+			DutyDay dutyDay = (httpQuery.get("duty_day") == null || httpQuery.get("duty_day").equals("null")) ? null : DutyDay.valueOf(httpQuery.get("duty_day"));
 			
 			Query query = new Query(subject, dorm, dutyDay);
 
 			List<ScoredTutor> scoredTutors = tutorMatcher.runQuery(query);
+			Collections.shuffle(scoredTutors);
 			Collections.sort(scoredTutors);
 			Collections.reverse(scoredTutors);
 			
-			Result result = new Result(scoredTutors);
-			return gson.toJson(result);
+			return gson.toJson(scoredTutors);
 		}
 
 	}
@@ -162,19 +172,15 @@ public class PeerTutoringServer {
 			JsonArray dormsJsonArray = new JsonArray();
 			for (Dorm dorm : Dorm.values()) {
 				JsonObject dormJsonObject = new JsonObject();
+				dormJsonObject.addProperty("id", dorm.name());
 				dormJsonObject.addProperty("name", dorm.getName());
 				dormJsonObject.addProperty("lat", dorm.getLocation().getLatitude());
 				dormJsonObject.addProperty("lng", dorm.getLocation().getLongitude());
 
-				JsonObject namedDormJsonObject = new JsonObject();
-				namedDormJsonObject.add(dorm.name(), dormJsonObject);
-				dormsJsonArray.add(namedDormJsonObject);
+				dormsJsonArray.add(dormJsonObject);
 			}
 
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.add("dorms", dormsJsonArray);
-
-			return jsonObject.toString();
+			return dormsJsonArray.toString();
 		}
 
 	}
@@ -184,20 +190,35 @@ public class PeerTutoringServer {
 
 		@Override
 		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
-			JsonArray dormsJsonArray = new JsonArray();
+			JsonArray subjectsJsonArray = new JsonArray();
 			for (Subject subject : Subject.values()) {
-				JsonObject dormJsonObject = new JsonObject();
-				dormJsonObject.addProperty("name", subject.getName());
+				JsonObject subjectJsonObject = new JsonObject();
+				subjectJsonObject.addProperty("id", subject.name());
+				subjectJsonObject.addProperty("name", subject.getName());
 
-				JsonObject namedSubjectJsonObject = new JsonObject();
-				namedSubjectJsonObject.add(subject.name(), dormJsonObject);
-				dormsJsonArray.add(namedSubjectJsonObject);
+				subjectsJsonArray.add(subjectJsonObject);
 			}
 
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.add("subjects", dormsJsonArray);
+			return subjectsJsonArray.toString();
+		}
 
-			return jsonObject.toString();
+	}
+	
+	
+	private static class DutyDaysListingHandler extends AbstractHttpHandler {
+
+		@Override
+		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
+			JsonArray dutyDaysJsonArray = new JsonArray();
+			for (DutyDay dutyDay : DutyDay.values()) {
+				JsonObject dutyDayJsonObject = new JsonObject();
+				dutyDayJsonObject.addProperty("id", dutyDay.name());
+				dutyDayJsonObject.addProperty("name", dutyDay.getName());
+				
+				dutyDaysJsonArray.add(dutyDayJsonObject);
+			}
+
+			return dutyDaysJsonArray.toString();
 		}
 
 	}

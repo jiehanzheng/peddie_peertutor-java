@@ -43,28 +43,27 @@ public class TutorMatcher {
 	 */
 	public List<ScoredTutor> runQuery(Query query) {
 		List<ScoredTutor> scoredTutors = new ArrayList<ScoredTutor>();
-		
-		if (query.isEmpty()) {
-			for (Tutor tutor : tutors) {
-				scoredTutors.add(new ScoredTutor(tutor, 0));
-			}
-			
-			return scoredTutors;
-		}
 
 		// TODO(adam): also filter tutors by DutyDay's
-		
+
 		// FIXME(adam): deal with nulls in Query's fields
 		// see basecamp: https://basecamp.com/2290910/projects/4508942-peer-tutoring/todos/75085591-make-tutormatcher
-		
+
 		// FIXME(adam): this is dirty
 		// try to change the scoring formula so that you don't need max dist
 		double standardScore = Dorm.ROBERSON.distanceTo(Dorm.POTTER_NORTH);
 
 		// find out tutors whose subject match first
 		for (Tutor tutor : tutors) {
-			if (tutor.getSubjects().contains(query.getSubject())) {
-				double score = 100 - (tutor.getDorm().distanceTo(query.getDorm()) * 100) / standardScore;
+			if ((query.getSubject() == null || tutor.getSubjects().contains(query.getSubject()))
+					&& (query.getDutyDay() == null || tutor.getDutyDays().contains(query.getDutyDay()))) {
+				double score;
+				if (query.getDorm() != null) {
+					score = 100 - (tutor.getDorm().distanceTo(query.getDorm()) * 100) / standardScore;
+				} else {
+					score = 0;
+				}
+				
 				scoredTutors.add(new ScoredTutor(tutor, score));
 			}
 		}

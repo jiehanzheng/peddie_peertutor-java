@@ -21,24 +21,24 @@ public class CheatingDatabase implements Database {
 	public Set<Tutor> getTutors() {
 		Set<Tutor> tutors = new HashSet<Tutor>();
 		
-		tutors.add(new Tutor("Tutor1", Dorm.CASPERSEN, 
-				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.TUESDAY)), "t1", 
+		tutors.add(new Tutor("Tutor1", "t1", Dorm.CASPERSEN, 
+				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.TUESDAY)),
 				new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.COMPSCI))));
 
-		tutors.add(new Tutor("Tutor2", Dorm.POTTER_SOUTH, 
-				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.WEDNESDAY)), "t2", 
+		tutors.add(new Tutor("Tutor2", "t2", Dorm.POTTER_SOUTH, 
+				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.WEDNESDAY)), 
 				new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.CHEMISTRY))));
 
-		tutors.add(new Tutor("Tutor3", Dorm.COLEMAN, 
-				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.THURSDAY)), "t3", 
+		tutors.add(new Tutor("Tutor3", "t3", Dorm.COLEMAN, 
+				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.THURSDAY)), 
 				new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.COMPSCI))));
 
-		tutors.add(new Tutor("Tutor4", Dorm.COLEMAN, 
-				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.THURSDAY)), "t4", 
+		tutors.add(new Tutor("Tutor4", "t4", Dorm.COLEMAN, 
+				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.THURSDAY)),  
 				new HashSet<Subject>(Arrays.asList(Subject.COMPSCI))));
 
-		tutors.add(new Tutor("Tutor5", Dorm.COLEMAN, 
-				new HashSet<DutyDay>(Arrays.asList(DutyDay.THURSDAY)), "t5", 
+		tutors.add(new Tutor("Tutor5", "t5", Dorm.COLEMAN, 
+				new HashSet<DutyDay>(Arrays.asList(DutyDay.THURSDAY)),  
 				new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.COMPSCI))));
 		
 		return tutors;

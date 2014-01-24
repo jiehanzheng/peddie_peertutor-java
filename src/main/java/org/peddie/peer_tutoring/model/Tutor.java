@@ -2,6 +2,8 @@ package org.peddie.peer_tutoring.model;
 
 import java.util.Set;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author jiehan
  *
@@ -10,15 +12,15 @@ public class Tutor {
 
 	private String name;
 	private Dorm dorm;
-	private Set<DutyDay> dutyDays;
-	private String emailPrefix;
+	@SerializedName("duty_days") private Set<DutyDay> dutyDays;
+	@SerializedName("email_prefix") private String emailPrefix;
 	private Set<Subject> subjects;
 
-	public Tutor(String name, Dorm dorm, Set<DutyDay> dutyDays, String emailPrefix, Set<Subject> subjects) {
+	public Tutor(String name, String emailPrefix, Dorm dorm, Set<DutyDay> dutyDays, Set<Subject> subjects) {
 		this.name = name;
+		this.emailPrefix = emailPrefix;
 		this.dorm = dorm;
 		this.dutyDays = dutyDays;
-		this.emailPrefix = emailPrefix;
 		this.subjects = subjects;
 	}
 
