@@ -195,6 +195,7 @@ public class PeerTutoringServer {
 				JsonObject subjectJsonObject = new JsonObject();
 				subjectJsonObject.addProperty("id", subject.name());
 				subjectJsonObject.addProperty("name", subject.getName());
+				subjectJsonObject.addProperty("subject_area", subject.getSubjectArea());
 
 				subjectsJsonArray.add(subjectJsonObject);
 			}

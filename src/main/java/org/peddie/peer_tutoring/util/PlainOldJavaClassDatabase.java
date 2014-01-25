@@ -23,7 +23,7 @@ public class PlainOldJavaClassDatabase implements Database {
 		
 		tutors.add(new Tutor("Alyssa Lee", "alee-14", Dorm.AVERY, 
 				new HashSet<DutyDay>(Arrays.asList(DutyDay.FRIDAY)), 
-				new HashSet<Subject>(Arrays.asList(Subject.MUSIC_THEORY, Subject.ALGEBRA, Subject.CALCULUS_AB, Subject.CALCULUS_BC))));
+				new HashSet<Subject>(Arrays.asList(Subject.ALGEBRA, Subject.CALCULUS_AB, Subject.CALCULUS_BC))));
 
 		tutors.add(new Tutor("Brett Clancy", "bclancy-14", Dorm.AVERY /* FIXME */, 
 				new HashSet<DutyDay>(Arrays.asList(DutyDay.FRIDAY)), 
@@ -31,7 +31,7 @@ public class PlainOldJavaClassDatabase implements Database {
 		
 		tutors.add(new Tutor("Chuanzhe Meng", "cmeng-15", Dorm.MARIBOE, 
 				new HashSet<DutyDay>(Arrays.asList(DutyDay.THURSDAY)), 
-				new HashSet<Subject>(Arrays.asList(Subject.ALGEBRA, Subject.CALCULUS_AB, Subject.CALCULUS_BC, Subject.COMPSCI, Subject.ROBOTICS, Subject.CHINESE))));
+				new HashSet<Subject>(Arrays.asList(Subject.ALGEBRA, Subject.CALCULUS_AB, Subject.CALCULUS_BC, Subject.COMPSCI, Subject.CHINESE))));
 		
 		tutors.add(new Tutor("Danielle Blick", "dblick-14", Dorm.AVERY /* FIXME */, 
 				new HashSet<DutyDay>(Arrays.asList(DutyDay.TUESDAY)), 

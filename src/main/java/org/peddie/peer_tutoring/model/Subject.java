@@ -6,43 +6,48 @@ package org.peddie.peer_tutoring.model;
  */
 public enum Subject {
 	
-	ENGLISH          ("English"),
-	ALGEBRA          ("Algebra 1/2"),
-	GEOMETRY         ("Geometry"),
-	PRE_CALCULUS     ("Pre-Calculus"),
-	CALCULUS_AB      ("AP Calculus AB"),
-	CALCULUS_BC      ("AP Calculus BC"),
-	STATS            ("Statistics"),
-	AP_STATS         ("AP Statistics"),
-	COMPSCI          ("Computer Science"),
-	CHEMISTRY        ("Chemistry"),
-	BIOLOGY          ("Biology"),
-	PHYSICS          ("Physics"),
-	HISTORY_10       ("Modern Global History"),
-	US_HISTORY       ("US History"),
-	AP_USH           ("AP US History"),
-	CHINESE          ("Chinese"),
-	FRENCH           ("French"),
-	SPANISH_2        ("Spanish 1/2"),
-	SPANISH_3        ("Spanish 3"),
-	SPANISH_4        ("Spanish 4"),
-	AP_SPANISH       ("AP Spanish"),
-	LATIN            ("Latin"),
-	ECON             ("Economics"),
-	PSYCHOLOGY       ("Psychology"),
-	ROBOTICS         ("Robotics"),
-	ENVIRONMENTAL    ("Environmental Science"),
-	MUSIC_THEORY     ("Music Theory"),
-	SAT              ("SAT");
+	ALGEBRA          ("Algebra", SubjectArea.MATH),
+	GEOMETRY         ("Geometry", SubjectArea.MATH),
+	PRE_CALCULUS     ("Pre-Calculus", SubjectArea.MATH),
+	CALCULUS         ("Calculus", SubjectArea.MATH),
+	CALCULUS_AB      ("AP Calculus AB", SubjectArea.MATH),
+	CALCULUS_BC      ("AP Calculus BC", SubjectArea.MATH),
+	STATS            ("Statistics", SubjectArea.MATH),
+	AP_STATS         ("AP Statistics", SubjectArea.MATH),
+	COMPSCI          ("Computer Science", SubjectArea.MATH),
+	ECON             ("Economics", SubjectArea.MATH),
+	CHEMISTRY        ("Chemistry", SubjectArea.SCIENCE),
+	BIOLOGY          ("Biology", SubjectArea.SCIENCE),
+	PHYSICS          ("Physics", SubjectArea.SCIENCE),
+	PSYCHOLOGY       ("Psychology", SubjectArea.SCIENCE),
+	HISTORY_10       ("Modern Global History", SubjectArea.HISTORY),
+	US_HISTORY       ("US History", SubjectArea.HISTORY),
+	AP_USH           ("AP US History", SubjectArea.HISTORY),
+	AP_GOV           ("AP US Government", SubjectArea.HISTORY),
+	CHINESE          ("Chinese", SubjectArea.LANGUAGE),
+	FRENCH           ("French", SubjectArea.LANGUAGE),
+	SPANISH_2        ("Spanish 1/2", SubjectArea.LANGUAGE),
+	SPANISH_3        ("Spanish 3", SubjectArea.LANGUAGE),
+	SPANISH_4        ("Spanish 4", SubjectArea.LANGUAGE),
+	AP_SPANISH       ("AP Spanish", SubjectArea.LANGUAGE),
+	LATIN            ("Latin", SubjectArea.LANGUAGE),
+	ENGLISH          ("English", SubjectArea.ENGLISH),
+	SAT              ("SAT", SubjectArea.STD_TEST);
 	
 	private String name;
+	private SubjectArea subjectArea;
 	
-	Subject(String name) {
+	Subject(String name, SubjectArea subjectArea) {
 		this.name = name;
+		this.subjectArea = subjectArea;
 	}
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getSubjectArea() {
+		return subjectArea.getName();
 	}
 	
 }
