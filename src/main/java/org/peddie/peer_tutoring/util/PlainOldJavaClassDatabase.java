@@ -48,7 +48,7 @@ public class PlainOldJavaClassDatabase implements Database {
 				new HashSet<Subject>(Arrays.asList(Subject.BIOLOGY, Subject.SPANISH_2, Subject.HISTORY_10))));
 		
 		tutors.add(new Tutor("Jiehan Zheng", "jzheng-14", Dorm.POTTER_SOUTH, 
-				new HashSet<DutyDay>(Arrays.asList(DutyDay.WEDNESDAY)), 
+				new HashSet<DutyDay>(Arrays.asList(DutyDay.MONDAY, DutyDay.THURSDAY)), 
 				new HashSet<Subject>(Arrays.asList(Subject.CHINESE, Subject.COMPSCI))));
 		
 		// updated, pic provided
