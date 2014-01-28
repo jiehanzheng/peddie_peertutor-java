@@ -3,6 +3,8 @@ package org.peddie.peer_tutoring.model;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
@@ -13,6 +15,8 @@ import com.google.gson.annotations.SerializedName;
  */
 @SuppressWarnings("unused")
 public class Tutor {
+	
+	private static transient Map<Tutor, Boolean> pictureExistence = new HashMap<Tutor, Boolean>(); 
 
 	private String name;
 	private Dorm dorm;
@@ -58,12 +62,20 @@ public class Tutor {
 	}
 	
 	public boolean hasPicture() {
-		String webProjectLocation = System.getenv("PEERTUTOR_WEB_FOLDER");
-		if (webProjectLocation == null)
-			throw new RuntimeException("Environment variable PEERTUTOR_WEB_FOLDER was not set.");
+		// look at cached results first, in order to prevent disk IO
+		if (!pictureExistence.containsKey(this)) {
+			System.err.println(getEmailPrefix() + "'s picture status was not cached.  Checking...");
+			
+			String webProjectLocation = System.getenv("PEERTUTOR_WEB_FOLDER");
+			if (webProjectLocation == null)
+				throw new RuntimeException("Environment variable PEERTUTOR_WEB_FOLDER was not set.");
+			
+			Path tutorPicturesPath = Paths.get(webProjectLocation).resolve("images").resolve("tutors");
+			Boolean pictureExists = Files.exists(tutorPicturesPath.resolve(getEmailPrefix() + ".jpg"));
+			pictureExistence.put(this, pictureExists);
+		}
 		
-		Path tutorPicturesPath = Paths.get(webProjectLocation).resolve("images").resolve("tutors");
-		return Files.exists(tutorPicturesPath.resolve(getEmailPrefix() + ".jpg"));
+		return pictureExistence.get(this);
 	}
 
 }
