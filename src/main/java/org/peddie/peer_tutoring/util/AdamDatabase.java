@@ -1,7 +1,6 @@
 package org.peddie.peer_tutoring.util;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Set;
 
 import org.peddie.peer_tutoring.model.Tutor;

@@ -1,7 +1,6 @@
-package org.peddie.peer_tutoring;
+package org.peddie.peer_tutoring.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,12 +42,7 @@ public class TutorMatcher {
 	 */
 	public List<ScoredTutor> runQuery(Query query) {
 		List<ScoredTutor> scoredTutors = new ArrayList<ScoredTutor>();
-
-		// TODO(adam): also filter tutors by DutyDay's
-
-		// FIXME(adam): deal with nulls in Query's fields
-		// see basecamp: https://basecamp.com/2290910/projects/4508942-peer-tutoring/todos/75085591-make-tutormatcher
-
+		
 		// FIXME(adam): this is dirty
 		// try to change the scoring formula so that you don't need max dist
 		double standardScore = Dorm.ROBERSON.distanceTo(Dorm.POTTER_NORTH);

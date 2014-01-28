@@ -10,7 +10,8 @@ public enum DutyDay {
 	TUESDAY   ("Tuesday"),
 	WEDNESDAY ("Wednesday"),
 	THURSDAY  ("Thursday"),
-	FRIDAY    ("Friday");
+	FRIDAY    ("Friday"),
+	SUNDAY    ("Sunday");
 	
 	
 	private String name;

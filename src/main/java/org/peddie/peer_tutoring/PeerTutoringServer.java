@@ -1,13 +1,11 @@
 package org.peddie.peer_tutoring;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,24 +16,21 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.peddie.peer_tutoring.model.Dorm;
 import org.peddie.peer_tutoring.model.DutyDay;
 import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Subject;
 import org.peddie.peer_tutoring.model.Tutor;
+import org.peddie.peer_tutoring.util.AbstractHttpHandler;
 import org.peddie.peer_tutoring.util.Database;
 import org.peddie.peer_tutoring.util.PlainOldJavaClassDatabase;
+import org.peddie.peer_tutoring.util.TutorMatcher;
+import org.peddie.peer_tutoring.util.TutorSerializer;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 /**
@@ -99,52 +94,13 @@ public class PeerTutoringServer {
 	}
 
 
-	private static abstract class AbstractHttpHandler implements HttpHandler {
-
-		Gson gson = new Gson();
-
-		@Override
-		public void handle(HttpExchange exchange) throws IOException {
-			List<NameValuePair> httpQuery = URLEncodedUtils.parse(exchange.getRequestURI(), "UTF-8");
-			System.err.println(this.getClass().getName() + ": " + httpQuery);
-
-			Map<String, String> queryKeyToValue = new HashMap<String, String>();
-			for (NameValuePair pair : httpQuery) {
-				queryKeyToValue.put(pair.getName(), pair.getValue());
-			}
-			
-			JsonObject defaultResultObject = new JsonObject();
-			defaultResultObject.addProperty("error", "Unknown error.");
-			
-			String result = defaultResultObject.toString();
-			int rCode = HttpStatus.SC_NOT_ACCEPTABLE;
-			long responseLength = 0;
-			try {
-				result = processQuery(queryKeyToValue);
-				rCode = HttpStatus.SC_OK;
-				responseLength = 0;
-			} catch (Exception e) {
-				e.printStackTrace();
-				JsonObject errorResultObject = new JsonObject();
-				errorResultObject.addProperty("error", e.getLocalizedMessage());
-				result = errorResultObject.toString();
-			} finally {
-				Headers responseHeaders = exchange.getResponseHeaders();
-				responseHeaders.add("Access-Control-Allow-Origin", "*");
-				responseHeaders.add("Content-Type", "application/json");
-				exchange.sendResponseHeaders(rCode, responseLength);
-				OutputStream responseBody = exchange.getResponseBody();
-				responseBody.write(result.getBytes());
-				exchange.close();
-			}
-		}
-
-		protected abstract String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException;
-
-	}
-
-
 	private static class QueryHandler extends AbstractHttpHandler {
+		
+		public QueryHandler() {
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Tutor.class, new TutorSerializer());
+			gson = gsonBuilder.create();
+		}
 
 		@Override
 		protected String processQuery(Map<String, String> httpQuery) throws IllegalArgumentException {
@@ -174,8 +130,7 @@ public class PeerTutoringServer {
 				JsonObject dormJsonObject = new JsonObject();
 				dormJsonObject.addProperty("id", dorm.name());
 				dormJsonObject.addProperty("name", dorm.getName());
-				dormJsonObject.addProperty("lat", dorm.getLocation().getLatitude());
-				dormJsonObject.addProperty("lng", dorm.getLocation().getLongitude());
+				dormJsonObject.addProperty("type", dorm.getType().getName());
 
 				dormsJsonArray.add(dormJsonObject);
 			}
@@ -195,7 +150,7 @@ public class PeerTutoringServer {
 				JsonObject subjectJsonObject = new JsonObject();
 				subjectJsonObject.addProperty("id", subject.name());
 				subjectJsonObject.addProperty("name", subject.getName());
-				subjectJsonObject.addProperty("subject_area", subject.getSubjectArea());
+				subjectJsonObject.addProperty("subject_area", subject.getSubjectArea().getName());
 
 				subjectsJsonArray.add(subjectJsonObject);
 			}

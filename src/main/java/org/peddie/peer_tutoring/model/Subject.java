@@ -29,9 +29,9 @@ public enum Subject {
 	SPANISH_2        ("Spanish 1/2", SubjectArea.LANGUAGE),
 	SPANISH_3        ("Spanish 3", SubjectArea.LANGUAGE),
 	SPANISH_4        ("Spanish 4", SubjectArea.LANGUAGE),
-	AP_SPANISH       ("AP Spanish", SubjectArea.LANGUAGE),
 	LATIN            ("Latin", SubjectArea.LANGUAGE),
 	ENGLISH          ("English", SubjectArea.ENGLISH),
+	ACT              ("ACT", SubjectArea.STD_TEST),
 	SAT              ("SAT", SubjectArea.STD_TEST);
 	
 	private String name;
@@ -46,8 +46,8 @@ public enum Subject {
 		return name;
 	}
 	
-	public String getSubjectArea() {
-		return subjectArea.getName();
+	public SubjectArea getSubjectArea() {
+		return subjectArea;
 	}
 	
 }

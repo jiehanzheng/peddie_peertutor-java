@@ -15,7 +15,7 @@ package org.peddie.peer_tutoring.model;
 public class ScoredTutor implements Comparable<ScoredTutor> {
 
 	private Tutor tutor;
-	private String id;
+	@SuppressWarnings("unused")	private String id;
 	private Double score;
 	
 	public ScoredTutor(Tutor tutor, double score) {
