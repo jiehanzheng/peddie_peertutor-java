@@ -1,6 +1,7 @@
 package org.peddie.peer_tutoring.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -9,8 +10,11 @@ import org.peddie.peer_tutoring.model.Query;
 import org.peddie.peer_tutoring.model.ScoredTutor;
 import org.peddie.peer_tutoring.model.Tutor;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+
 /**
- * @author adam
+ * @author jiehan
  *
  */
 public class TutorMatcher {
@@ -42,10 +46,6 @@ public class TutorMatcher {
 	 */
 	public List<ScoredTutor> runQuery(Query query) {
 		List<ScoredTutor> scoredTutors = new ArrayList<ScoredTutor>();
-		
-		// FIXME(adam): this is dirty
-		// try to change the scoring formula so that you don't need max dist
-		double standardScore = Dorm.ROBERSON.distanceTo(Dorm.POTTER_NORTH);
 
 		// find out tutors whose subject match first
 		for (Tutor tutor : tutors) {
@@ -53,11 +53,17 @@ public class TutorMatcher {
 					&& (query.getDutyDay() == null || tutor.getDutyDays().contains(query.getDutyDay()))) {
 				double score;
 				if (query.getDorm() != null) {
-					score = 100 - (tutor.getDorm().distanceTo(query.getDorm()) * 100) / standardScore;
+					final Dorm queriedDorm = query.getDorm();
+					score = Collections.max(Collections2.transform(tutor.getDorms(), new Function<Dorm, Double>() {
+						@Override
+						public Double apply(Dorm dorm) {
+							return 1 / (dorm.distanceTo(queriedDorm) + 1);
+						}
+					}));
 				} else {
 					score = 0;
 				}
-				
+
 				scoredTutors.add(new ScoredTutor(tutor, score));
 			}
 		}

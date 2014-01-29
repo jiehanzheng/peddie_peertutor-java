@@ -99,7 +99,7 @@ public class TutorMatcherTest {
 		Collections.reverse(scoredTutors);
 
 		assertEquals("Method should not remove any tutors.", tutors.size(), scoredTutors.size());
-		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("First tutor's dorm should be Potter South.", scoredTutors.get(0).getTutor().getDorms().contains(Dorm.POTTER_SOUTH));
 		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}
 
@@ -158,7 +158,7 @@ public class TutorMatcherTest {
 		}
 
 		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors, scoredTutors.size());
-		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("First tutor's dorm should be Potter South.", scoredTutors.get(0).getTutor().getDorms().contains(Dorm.POTTER_SOUTH));
 		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}
 
@@ -188,7 +188,7 @@ public class TutorMatcherTest {
 		}
 
 		assertEquals("Method did not return the correct number of tutors.", numberOfExpectedTutors, scoredTutors.size());
-		assertEquals("First tutor's dorm should be Potter South.", Dorm.POTTER_SOUTH, scoredTutors.get(0).getTutor().getDorm());
+		assertTrue("First tutor's dorm should be Potter South.", scoredTutors.get(0).getTutor().getDorms().contains(Dorm.POTTER_SOUTH));
 		assertTrue("Second tutor should have a score lower than the first.", scoredTutors.get(0).getScore() > scoredTutors.get(1).getScore());
 	}
 

@@ -6,6 +6,7 @@ package org.peddie.peer_tutoring.model;
  */
 public enum Subject {
 	
+	// math subjects
 	ALGEBRA          ("Algebra", SubjectArea.MATH),
 	GEOMETRY         ("Geometry", SubjectArea.MATH),
 	PRE_CALCULUS     ("Pre-Calculus", SubjectArea.MATH),
@@ -16,21 +17,32 @@ public enum Subject {
 	AP_STATS         ("AP Statistics", SubjectArea.MATH),
 	COMPSCI          ("Computer Science", SubjectArea.MATH),
 	ECON             ("Economics", SubjectArea.MATH),
+	
+	// science subjects
 	CHEMISTRY        ("Chemistry", SubjectArea.SCIENCE),
 	BIOLOGY          ("Biology", SubjectArea.SCIENCE),
 	PHYSICS          ("Physics", SubjectArea.SCIENCE),
-	PSYCHOLOGY       ("Psychology", SubjectArea.SCIENCE),
+//	PSYCHOLOGY       ("Psychology", SubjectArea.SCIENCE),
+	
+	// history subjects
 	HISTORY_10       ("Modern Global History", SubjectArea.HISTORY),
 	US_HISTORY       ("US History", SubjectArea.HISTORY),
 	AP_USH           ("AP US History", SubjectArea.HISTORY),
-	AP_GOV           ("AP US Government", SubjectArea.HISTORY),
+//	AP_GOV           ("AP US Government", SubjectArea.HISTORY),
+	
+	// language subject: in alphabetical order
 	CHINESE          ("Chinese", SubjectArea.LANGUAGE),
-	FRENCH           ("French", SubjectArea.LANGUAGE),
+	FRENCH_2         ("French 1/2", SubjectArea.LANGUAGE),
+	FRENCH_3_4       ("French 3+", SubjectArea.LANGUAGE),
+//	LATIN            ("Latin", SubjectArea.LANGUAGE),
 	SPANISH_2        ("Spanish 1/2", SubjectArea.LANGUAGE),
 	SPANISH_3        ("Spanish 3", SubjectArea.LANGUAGE),
 	SPANISH_4        ("Spanish 4", SubjectArea.LANGUAGE),
-	LATIN            ("Latin", SubjectArea.LANGUAGE),
+	
+	// english department
 	ENGLISH          ("English", SubjectArea.ENGLISH),
+	
+	// standardized test
 	ACT              ("ACT", SubjectArea.STD_TEST),
 	SAT              ("SAT", SubjectArea.STD_TEST);
 	

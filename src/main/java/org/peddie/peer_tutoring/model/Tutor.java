@@ -3,7 +3,9 @@ package org.peddie.peer_tutoring.model;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,21 +21,25 @@ public class Tutor {
 	private static transient Map<Tutor, Boolean> pictureExistence = new HashMap<Tutor, Boolean>(); 
 
 	private String name;
-	private Dorm dorm;
+	private Set<Dorm> dorms;
 	private Set<DutyDay> dutyDays;
 	private String emailPrefix;
 	private Set<Subject> subjects;
-
+	
 	public Tutor(String name, String emailPrefix, Dorm dorm, Set<DutyDay> dutyDays, Set<Subject> subjects) {
+		this(name, emailPrefix, new HashSet<Dorm>(Arrays.asList(dorm)), dutyDays, subjects);
+	}
+
+	public Tutor(String name, String emailPrefix, Set<Dorm> dorms, Set<DutyDay> dutyDays, Set<Subject> subjects) {
 		this.name = name;
 		this.emailPrefix = emailPrefix;
-		this.dorm = dorm;
+		this.dorms = dorms;
 		this.dutyDays = dutyDays;
 		this.subjects = subjects;
 	}
 
 	public String toString() {
-		return "Tutor(name=" + name + ", dorm=" + dorm + ", dutyDays=" + dutyDays + 
+		return "Tutor(name=" + name + ", dorms=" + dorms + ", dutyDays=" + dutyDays + 
 				", emailPrefix=" + emailPrefix + ", subjects=" + subjects + ")";
 	}
 
@@ -41,8 +47,8 @@ public class Tutor {
 		return name;
 	}
 
-	public Dorm getDorm() {
-		return dorm;
+	public Set<Dorm> getDorms() {
+		return dorms;
 	}
 
 	public Set<DutyDay> getDutyDays() {
