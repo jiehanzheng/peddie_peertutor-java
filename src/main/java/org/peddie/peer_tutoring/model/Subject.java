@@ -21,6 +21,7 @@ public enum Subject {
 	// science subjects
 	CHEMISTRY        ("Chemistry", SubjectArea.SCIENCE),
 	BIOLOGY          ("Biology", SubjectArea.SCIENCE),
+	AP_BIOLOGY       ("AP Biology", SubjectArea.SCIENCE),
 	PHYSICS          ("Physics", SubjectArea.SCIENCE),
 //	PSYCHOLOGY       ("Psychology", SubjectArea.SCIENCE),
 	
@@ -28,7 +29,7 @@ public enum Subject {
 	HISTORY_10       ("Modern Global History", SubjectArea.HISTORY),
 	US_HISTORY       ("US History", SubjectArea.HISTORY),
 	AP_USH           ("AP US History", SubjectArea.HISTORY),
-//	AP_GOV           ("AP US Government", SubjectArea.HISTORY),
+	AP_GOV           ("AP US Government", SubjectArea.HISTORY),
 	
 	// language subject: in alphabetical order
 	CHINESE          ("Chinese", SubjectArea.LANGUAGE),
